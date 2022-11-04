@@ -1,0 +1,27 @@
+name: 'Run Nomad Job'
+description: 'Handles running of a given nomad job'
+inputs:
+  auth:
+    description: 'Base64 encoded version of username:password to access the nomad server'
+    required: true
+  address:
+    description: 'Address of the nomad server'
+    required: true
+  job:
+    description: 'Path to the nomad job file'
+    required: true
+  datacenters:
+    description: 'Alternative list of datacenters for deployment if default in job-file are not used'
+    required: false
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.auth }}
+    - ${{ inputs.address }}
+    - ${{ inputs.job }}
+    - ${{ inputs.datacenters }}
+branding:
+  icon: 'upload-cloud'
+  color: 'gray-dark'

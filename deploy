@@ -1,0 +1,38 @@
+#! /usr/bin/env bash
+
+nomad_auth=$1
+nomad_address=$2
+nomad_job_file=$3
+datacenters=$4
+final_nomad_job_file=/tmp/nomad-deploy/jobs/$(basename "$3")
+workfile=`mktemp`
+
+prepare_nomad_file() {
+  # Make the temporary directory and create the new job file
+  mkdir -p /tmp/nomad-deploy/jobs 
+  touch "$final_nomad_job_file"
+
+  # convert hcl-file to json
+  if [[ "$nomad_job_file" == *".hcl" ]]
+  then
+    nomad job run -output "$nomad_job_file" >| "$final_nomad_job_file"
+  else
+    # use as-is
+    cat "$nomad_job_file" > "$final_nomad_job_file"
+  fi
+
+  if [[ $datacenters != "" ]]
+  then
+    cat "$final_nomad_job_file" | jq '.Job.Datacenters = ["$datacenters"]' >| "$workfile"
+    cat "$workfile" > "$final_nomad_job_file"
+  fi
+}
+
+if [ -f "$nomad_job_file" ]; then
+  echo "$nomad_job_file exists"
+  prepare_nomad_file
+  curl -s -H "Authorization: Basic $nomad_auth" -X POST --data @$final_nomad_job_file "https://$nomad_address/v1/jobs" | jq
+else
+  echo "$nomad_job_file does not exist"
+  exit 1
+fi
