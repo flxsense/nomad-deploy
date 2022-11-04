@@ -15,6 +15,7 @@ prepare_nomad_file() {
 
   if [[ "$tag" != "" && "$tag" != "master" ]]
   then
+    echo "using docker tag $tag"
     cat "$nomad_job_file" | sed -r "s/:latest/:$tag/g" >| "$workfile"
   else 
     cat "$nomad_job_file" >| "$workfile"
