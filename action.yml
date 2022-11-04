@@ -22,6 +22,7 @@ runs:
     - ${{ inputs.address }}
     - ${{ inputs.job }}
     - ${{ inputs.datacenters }}
+    - ${{ inputs.tag }}
 branding:
   icon: 'upload-cloud'
   color: 'gray-dark'

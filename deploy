@@ -4,6 +4,7 @@ nomad_auth=$1
 nomad_address=$2
 nomad_job_file=$3
 datacenters=$4
+tag=$5
 final_nomad_job_file=/tmp/nomad-deploy/jobs/$(basename "$3")
 workfile=`mktemp`
 
@@ -12,14 +13,21 @@ prepare_nomad_file() {
   mkdir -p /tmp/nomad-deploy/jobs 
   touch "$final_nomad_job_file"
 
+  if [[ "$tag" != "" && "$tag" != "master" ]]
+  then
+    cat "$nomad_job_file" | sed -r "s/:latest/:$tag/g" >| "$workfile"
+  else 
+    cat "$nomad_job_file" >| "$workfile"
+  fi
+
   # convert hcl-file to json
   if [[ "$nomad_job_file" == *".hcl" ]]
   then
     echo "converting job-file $nomad_job_file to json"
-    nomad job run -output "$nomad_job_file" >| "$final_nomad_job_file"
+    nomad job run -output "$workfile" >| "$final_nomad_job_file"
   else
     # use as-is
-    cat "$nomad_job_file" > "$final_nomad_job_file"
+    cat "$workfile" > "$final_nomad_job_file"
   fi
 
   if [[ $datacenters != "" ]]
