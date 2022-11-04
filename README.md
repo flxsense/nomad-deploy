@@ -2,13 +2,6 @@
 
 Small GitHub Action that runs `nomad job run ...` with the Nomad CLI.
 
-## Docker image build
-
-```shell
-$ docker build -t pmhansen/nomad-build .
-$ docker push pmhansen/nomad-build:latest
-```
-
 ## Usage
 
 Straightforward checkout then publish
@@ -33,5 +26,5 @@ jobs:
           # optional:
           datacenters: 'comma-separated list of datacenters if default in job-file are not used'
           # if other docker tags than latest are used:
-          tag: $GITHUB_REF_NAME
+          tag: ${{ github.ref }}
 ```
