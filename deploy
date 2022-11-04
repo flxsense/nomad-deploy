@@ -33,8 +33,8 @@ prepare_nomad_file() {
 if [ -f "$nomad_job_file" ]; then
   echo "$nomad_job_file exists"
   prepare_nomad_file
-  curl -s -H "Authorization: Basic $nomad_auth" -X POST --data @$final_nomad_job_file "$nomad_address/v1/jobs" | jq
-  exit $!
+  curl -s -S -H "Authorization: Basic $nomad_auth" -X POST --data @$final_nomad_job_file "$nomad_address/v1/jobs" | jq
+  exit $?
 else
   echo "$nomad_job_file does not exist"
   exit 1
