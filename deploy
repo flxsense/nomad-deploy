@@ -24,7 +24,7 @@ prepare_nomad_file() {
 
   if [[ $datacenters != "" ]]
   then
-    echo "replacing datacenters to $datacenters"
+    echo "replacing datacenter values"
     cat "$final_nomad_job_file" | jq '.Job.Datacenters = ["$datacenters"]' >| "$workfile"
     cat "$workfile" > "$final_nomad_job_file"
   fi
@@ -33,7 +33,7 @@ prepare_nomad_file() {
 if [ -f "$nomad_job_file" ]; then
   echo "$nomad_job_file exists"
   prepare_nomad_file
-  curl -H "Authorization: Basic $nomad_auth" -X POST --data @$final_nomad_job_file "https://$nomad_address/v1/jobs" | jq
+  curl -H "Authorization: Basic $nomad_auth" -X POST --data @$final_nomad_job_file "$nomad_address/v1/jobs" | jq
   exit $!
 else
   echo "$nomad_job_file does not exist"
