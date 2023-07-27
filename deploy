@@ -5,6 +5,7 @@ nomad_address=$2
 nomad_job_file=$3
 datacenters=$4
 tag=$5
+count=$6
 final_nomad_job_file=/tmp/nomad-deploy/jobs/$(basename "$3")
 workfile=`mktemp`
 
@@ -41,6 +42,13 @@ prepare_nomad_file() {
   then
     echo "replacing datacenter values"
     cat "$final_nomad_job_file" | jq ".Job.Datacenters = [\"$datacenters\"]" >| "$workfile"
+    cat "$workfile" > "$final_nomad_job_file"
+  fi
+
+  if [[ $count != "" ]]
+  then
+    echo "replacing number of deployments"
+    cat "$final_nomad_job_file" | jq ".Job.TaskGroups[0].Count = $count" >| "$workfile"
     cat "$workfile" > "$final_nomad_job_file"
   fi
 }

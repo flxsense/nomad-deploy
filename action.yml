@@ -18,6 +18,10 @@ inputs:
     description: 'Use GITHUB_NAME_REF as dosker tag'
     required: false
     default: ''
+  count:
+    description: 'Overwrite number of deployments in job file'
+    required: false
+    default: ''
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -27,6 +31,7 @@ runs:
     - ${{ inputs.job }}
     - ${{ inputs.datacenters }}
     - ${{ inputs.tag }}
+    - ${{ inputs.count }}
 branding:
   icon: 'upload-cloud'
   color: 'gray-dark'
