@@ -1,4 +1,4 @@
-FROM hendrikmaus/nomad-cli:1.2.3
+FROM hendrikmaus/nomad-cli:1.6.1
 
 RUN apk update && apk add bash gettext jq curl ca-certificates
 
