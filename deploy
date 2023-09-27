@@ -4,9 +4,10 @@ nomad_auth=$1
 nomad_address=$2
 nomad_job_file=$3
 datacenters=$4
-tag=$5
-count=$6
-final_nomad_job_file=/tmp/nomad-deploy/jobs/$(basename "$3")
+node_pool=$5
+tag=$6
+count=$7
+final_nomad_job_file=/tmp/nomad-deploy/jobs/$(basename "$nomad_job_file")
 workfile=`mktemp`
 
 prepare_nomad_file() {
@@ -42,6 +43,13 @@ prepare_nomad_file() {
   then
     echo "replacing datacenter values"
     cat "$final_nomad_job_file" | jq ".Job.Datacenters = [\"$datacenters\"]" >| "$workfile"
+    cat "$workfile" > "$final_nomad_job_file"
+  fi
+
+  if [[ $node_pool != "" ]]
+  then
+    echo "set nomad node_pool"
+    cat "$final_nomad_job_file" | jq ".Job.NodePool = $node_pool" >| "$workfile"
     cat "$workfile" > "$final_nomad_job_file"
   fi
 

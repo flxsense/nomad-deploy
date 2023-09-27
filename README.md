@@ -25,6 +25,10 @@ jobs:
           job: path/to/your/nomad/job/file
           # optional:
           datacenters: 'comma-separated list of datacenters if default in job-file are not used'
-          # if other docker tags than latest are used:
+          node_pool: 'if other than default are used'
+          # if other docker tags than 'latest' are used:
           tag: ${{ github.ref }}
+          # Deployment count
+          count: 2
+
 ```
