@@ -19,7 +19,7 @@ inputs:
     required: false
     default: ''
   tag:
-    description: 'Use GITHUB_NAME_REF as dosker tag'
+    description: 'Use GITHUB_NAME_REF as docker tag'
     required: false
     default: ''
   count:

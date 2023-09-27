@@ -49,7 +49,7 @@ prepare_nomad_file() {
   if [[ $node_pool != "" ]]
   then
     echo "set nomad node_pool"
-    cat "$final_nomad_job_file" | jq ".Job.NodePool = $node_pool" >| "$workfile"
+    cat "$final_nomad_job_file" | jq ".Job.NodePool = \"$node_pool\"" >| "$workfile"
     cat "$workfile" > "$final_nomad_job_file"
   fi
 
